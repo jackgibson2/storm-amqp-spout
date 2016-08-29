@@ -1,6 +1,18 @@
-# storm-amqp-spout: AMQP input source for Storm #
+# storm-amqp10-spout: AMQP 1.0 input source for Storm #
 
-storm-amqp-spout allows a [Storm][] topology to consume an AMQP queue as an
+This is based on a fork of https://github.com/dkincaid/storm-amqp-spout which uses older AMQP 0.91 protocol which works with RabbitMQ.   This  implementation is based on the Qpid Proton (https://qpid.apache.org/proton) library which supports AMQP 1.0 .  This spout will allow topologies to consume messages from the following messaging subsystems:
+
+ * Apache Qpid Broker
+ * Apache Qpid Dispatch Router
+ * WS02
+ * Apache Active MQ
+ * IBM WebSphere MQ
+ * Microsoft Azure Service Bus
+ * Swift MQ
+ * Kaazing Gateway
+ * Storm MQ
+
+storm-amqp10-spout allows a [Storm][] topology to consume an AMQP queue as an
 input source.  It currently provides:
 
  * <tt>[AMQPSpout][]</tt>: an implementation of
@@ -19,13 +31,13 @@ You'll need to provide a [Scheme][] to tell AMQPSpout how to interpret the
 messages and turn them into Storm tuples.  See e.g. [storm-json][] if your
 messages are JSON.
 
-## Documentation ##
+## Documentation ##]
 
-The Javadocs can be found at [http://code.rapportive.com/storm-amqp-spout]().
+TODO:
 
 ## Usage ##
 
-To produce a jar:
+To build:
 
     $ mvn package
 
@@ -34,52 +46,9 @@ To install in your local Maven repository:
     $ mvn install
 
 To use in your `pom.xml`:
-
-```xml
-<project>
-  <!-- ... -->
-  <dependencies>
-    <!-- ... -->
-    <dependency>
-      <groupId>com.rapportive</groupId>
-      <artifactId>storm-amqp-spout</artifactId>
-      <version>0.1.1</version>
-    </dependency>
-    <!-- ... -->
-  </dependencies>
-  <!-- ... -->
-</project>
-```
-
-## Caveats ##
-
-This is early software.  It has been used at production volumes, but not yet
-for business-critical use cases.  It may break and the API is liable to change
-completely between releases.  Pull requests, patches and bug reports are very
-welcome.
-
-**N.B.** if you need to guarantee all messages are reliably processed, you
-should have AMQPSpout consume from a queue that is *not* set as 'exclusive' or
-'auto-delete': otherwise if the spout task crashes or is restarted, the queue
-will be deleted and any messages in it lost, as will any messages published
-while the task remains down.  See [SharedQueueWithBinding][] to declare a
-shared queue that allows for guaranteed processing.  (For prototyping, an
-[ExclusiveQueueWithBinding][] may be simpler to manage.)
-
-This does not currently handle malformed messages very well: the spout worker
-will crash if the provided [Scheme][] fails to deserialise a message.
-
-This does not currently support retrying messages in the event of transient
-failure to process: any message which the topology fails to process will simply
-be dropped.  This is to prevent infinite redelivery in the event of
-non-transient failures (e.g. malformed messages, though see previous caveat!).
-This will probably be made configurable in a future release.
+TODO: 
 
 ## Compatibility ##
-
-AMQPSpout has been tested with RabbitMQ 2.3.1, 2.6.1 and 2.7.0.  It should probably work with other
-versions and other AMQP brokers.
-
 
 [Storm]: <https://github.com/nathanmarz/storm>
     "Storm project homepage"
